@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/app_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/app_bg"
         tools:context=".ui.ActivityHome">
 
         <TextView
@@ -18,8 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:padding="5dp"
             android:text="Weather"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             android:textSize="36sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +33,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/day"
+            android:src="@drawable/sunny"
             app:layout_constraintStart_toEndOf="@+id/appImageText"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +44,9 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:padding="5dp"
             android:text="Network Status: Lost"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,8 +58,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             android:layout_marginBottom="20dp"
-            android:padding="2dp"
+            android:padding="5dp"
             android:text="Last Updated:"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,10 +70,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/differentWeatherRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="25dp"
-            android:scrollbars="horizontal"
             android:padding="16dp"
+            android:scrollbars="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

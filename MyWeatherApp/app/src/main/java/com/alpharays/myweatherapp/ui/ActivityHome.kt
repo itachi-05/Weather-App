@@ -85,8 +85,8 @@ class ActivityHome : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
 
         val locationRequest = LocationRequest.create().apply {
-            interval = (60000 * 2) // 2 min
-            fastestInterval = 5000 // 5 seconds
+            interval = (60000 * 10) // 2 min
+            fastestInterval = 10000 // 5 seconds
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         }
 

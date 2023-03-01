@@ -18,7 +18,6 @@ class LocationPermissionReceiver(private val view: View, private val homeBinding
                 locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) ?: false
             if (locationEnabled) {
                 Log.i("location", "enabled")
-                homeBinding.appImageText.text = "Shivang"
                 Snackbar.make(view, "Location enabled", 2500).show()
             } else {
                 Log.i("location", "disabled")
