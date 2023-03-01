@@ -72,7 +72,8 @@ class ActivityHome : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         try {
             // Registering the receiver to listen for location permission changes
-            locationPermissionReceiver = LocationPermissionReceiver(binding.root)
+            locationPermissionReceiver =
+                LocationPermissionReceiver(binding.root, binding)
             val intentFilter = IntentFilter().apply {
                 addAction(LocationManager.MODE_CHANGED_ACTION)
             }
