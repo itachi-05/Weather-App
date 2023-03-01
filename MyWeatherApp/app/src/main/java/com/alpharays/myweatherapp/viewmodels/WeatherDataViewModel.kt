@@ -1,69 +1,50 @@
 package com.alpharays.myweatherapp.viewmodels
 
-import android.content.Context
+import android.app.Application
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpharays.myweatherapp.data.dataclasses.Location
 import com.alpharays.myweatherapp.data.dataclasses.WeatherData
 import com.alpharays.myweatherapp.data.interfaces.WeatherService
-import com.alpharays.myweatherapp.data.dataclasses.*
-import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
-import java.io.IOException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class WeatherDataViewModel : ViewModel() {
-    private val _response = MutableLiveData<WeatherData>()
 
-    val response: LiveData<WeatherData> get() = _response
+class WeatherDataViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun getWeather(context: Context, lat: String, lon: String) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-//            WeatherService.weatherInstance.getWeather(lat,lon).execute() : execute blocks the current thread until it gets the response from the server
-            WeatherService.weatherInstance.getWeather(lat, lon).enqueue(object :
-                Callback<WeatherData> {
-                override fun onResponse(call: Call<WeatherData>, response: Response<WeatherData>) {
-                    if (response.isSuccessful) {
-                        _response.postValue(response.body())
-                        Log.i("Response", "Found")
-                    } else {
-                        // handle error
-                        Log.i("Response", "Not Found")
-                    }
-                }
+    private val _response = MutableLiveData<List<WeatherData>>()
+    val response: LiveData<List<WeatherData>> = _response
 
-                override fun onFailure(call: Call<WeatherData>, t: Throwable) {
-                    Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show()
-                    when (t) {
-                        is IOException -> {
-                            Log.i("ErrorRetrofit", "Network Failure")
-                            // handle network failure
-                        }
-                        is HttpException -> {
-                            Log.i("ErrorRetrofit", "HTTP status code Failure")
-                            // handle HTTP status code failure
-                        }
-                        else -> {
-                            Log.i("ErrorRetrofit", t.toString())
-                            // handle other failures
+    private val _response2 = MutableLiveData<Boolean>()
+    val response2: LiveData<Boolean> = _response2
+
+    fun fetchWeatherData(locations: ArrayList<Location>) {
+        viewModelScope.launch {
+            val responses = mutableListOf<WeatherData>()
+            withContext(Dispatchers.IO) {
+                try {
+                    _response2.postValue(true)
+                    for (location in locations) {
+                        val response =
+                            WeatherService.weatherInstance.getWeather(location.lat, location.lon)
+                                .execute()
+                        if (response.isSuccessful) {
+                            response.body()?.let { weatherData ->
+                                responses.add(weatherData)
+                            }
                         }
                     }
+                } catch (e: Exception) {
+                    _response2.postValue(false)
+                    Log.i("NETWORK","ERROR")
                 }
-            })
+            }
+            _response.value = responses
         }
     }
-
-    fun getWeatherMain(): WeatherMain? = _response.value?.main
-
-    fun getWeatherSys(): Sys? = _response.value?.sys
-
-    fun getWeatherWind(): Wind? = _response.value?.wind
-
-    fun getWeatherClimate(): List<WeatherClimate>? = _response.value?.weather
 
 }
